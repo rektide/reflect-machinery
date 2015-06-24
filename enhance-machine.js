@@ -2,14 +2,18 @@ var
   path= require("path")
   machine= require("machine"),
   resolve= require("resolve"),
-  reflectMachinery= require("./reflect-machinery"),
-  _pack= machine.pack
+  reflectMachinery= require("./reflect-machinery")
 
-function EnhanceMachine_pack(machinePack){
-	var machines= _pack.call(machine, machinePack)
-	reflectMachinery.ReflectMachine.call(machines, machinePack)
-	machines.__proto__= reflectMachinery.ReflectMachine.prototype
-	return machines
+function ReflectMachinery(existing){
+	if(existing.name === "ReflectMachinePack_pack"){
+		return existing
+	}
+	return function ReflectMachinePack_pack(machinePack){
+		var machines= existing.call(machine, machinePack)
+		reflectMachinery.ReflectMachine.call(machines, machinePack)
+		machines.__proto__= reflectMachinery.ReflectMachine.prototype
+		return machines
+	}
 }
 
 module.exports= new Promise(function(cb, reject){
@@ -29,10 +33,10 @@ module.exports= new Promise(function(cb, reject){
 		}
 		var packPath = path.dirname(res) + "/lib/Machine.pack.js"
 		var constructorPath = path.dirname(res) + "/lib/Machine.constructor.js"
-		require.cache[res].exports.pack= EnhanceMachine_pack
-		require.cache[packPath].exports= EnhanceMachine_pack
-		require.cache[constructorPath].exports.pack= EnhanceMachine_pack
-		machine.pack= EnhanceMachine_pack
+		require.cache[res].exports.pack= ReflectMachinery(require.cache[res].exports.pack)
+		require.cache[packPath].exports= ReflectMachinery(require.cache[packPath].exports)
+		require.cache[constructorPath].exports.pack= ReflectMachinery(require.cache[constructorPath].exports.pack)
+		machine.pack= ReflectMachinery(machine.pack)
 		cb(machine)
 	})
 })
