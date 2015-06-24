@@ -11,7 +11,6 @@ function ReflectMachinery(existing){
 	return function ReflectMachinePack_pack(machinePack){
 		var machines= existing.call(machine, machinePack)
 		reflectMachinery.ReflectMachine.call(machines, machinePack)
-		machines.__proto__= reflectMachinery.ReflectMachine.prototype
 		return machines
 	}
 }

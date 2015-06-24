@@ -1,6 +1,6 @@
 {
 	"name": "reflect-machinery",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Get a machinepack which exposes reflection information",
 	"main": "reflect-machinery.js",
 	"scripts": {

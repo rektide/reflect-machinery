@@ -35,23 +35,17 @@ module.exports= exports= ReflectMachinery
 exports.ReflectMachinery= ReflectMachinery
 
 function ReflectMachine(machinePack){
-	Object.defineProperty(this, "_pkg", {
-		value: machinePack.pkg
+	Object.defineProperty(this, "pkg", {
+		get: function(){
+			return machinePack.pkg
+		}
 	})
-	Object.defineProperty(this, "_dir", {
-		value: machinePack.dir
+	Object.defineProperty(this, "dir", {
+		get: function(){
+			return machinePack.dir
+		}
 	})
 }
-Object.defineProperty(ReflectMachine.prototype, "pkg", {
-	get: function(){
-		return this._pkg
-	}
-})
-Object.defineProperty(ReflectMachine.prototype, "dir", {
-	get: function(){
-		return this._dir
-	}
-})
 exports.ReflectMachine= ReflectMachine
 
 function fs(){
